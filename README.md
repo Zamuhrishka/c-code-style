@@ -1,6 +1,6 @@
 # Recommended C style and coding rules
 
-This document describes C code style used by Tilen MAJERLE in his projects and libraries.
+This document describes C code style used by [Alexander Kovalchuk](https://github.com/Zamuhrishka) in his projects and libraries.
 
 # General rules
 
@@ -17,15 +17,14 @@ int a = sum (4, 3);     /* Wrong */
 ```
 
 - Never use `__` or `_` prefix for variables/functions/macros/types. This is reserved for C language itself
-- Use only lowercase characters for variables/functions/macros/types with optional underscore `_` char
-- Opening curly bracket is always at the same line as keyword (`for`, `while`, `do`, `switch`, `if`, ...)
+- Opening curly bracket is always at the next line as keyword (`for`, `while`, `do`, `switch`, `if`, ...)
 ```c
 int a;
-for (a = 0; a < 5; ++i) {           /* OK */
+for (a = 0; a < 5; ++i) {           /* Wrong */
 }
 for (a = 0; a < 5; ++i){            /* Wrong */
 }
-for (a = 0; a < 5; ++i)             /* Wrong */
+for (a = 0; a < 5; ++i)             /* OK */
 {
 }
 ```
@@ -46,23 +45,23 @@ func_name(5, 4);        /* OK */
 func_name(4,3);         /* Wrong */
 ```
 
-- Do not initialize `static` and `global` variables to `0` (or `NULL`), let compiler do it for you
+- Always initialize `static` and `global` variables
 ```c
-static int a;           /* OK */
+static int a;           /* Wrong */
 static int b = 4;       /* OK */
-static int a = 0;       /* Wrong */
+static int a = 0;       /* OK */
 
-void
-my_func(void) {
-    static int* ptr;    /* OK */
-    static char abc = 0;/* Wrong */
+void my_func(void) 
+{
+    static int* ptr;    /* Wrong */
+    static char abc = 0;/* OK */
 }
 ```
 
 - Declare all local variables of the same type in the same line
 ```c
-void
-my_func(void) {
+void my_func(void) 
+{
     char a;             /* OK */
     char a, b;          /* OK */
     char b;             /* Wrong, variable with char type already exists */
@@ -74,8 +73,8 @@ my_func(void) {
     2. Integer types, wider unsigned type first
     3. Single/Double floating point
 ```c
-int
-my_func(void) {
+int my_func(void) 
+{
     /* 1 */
     my_struct_t my;     /* First custom structures */
     my_struct_ptr_t* p; /* Pointers too */
@@ -102,12 +101,15 @@ for (int i = 0; i < 10; ++i)
 
 /* OK, if you need counter variable later */
 int i;
-for (i = 0; i < 10; ++i) {
-    if (...) {
+for (i = 0; i < 10; ++i) 
+{
+    if (...) 
+    {
         break;
     }
 }
-if (i == 10) {
+if (i == 10) 
+{
 
 }
 
@@ -118,8 +120,8 @@ for (i = 0; i < 10; ++i) ...
 
 - Avoid variable assignment with function call in declaration, except for single variables
 ```c
-void
-a(void) {
+void a(void) 
+{
     /* Avoid function calls when declaring variable */
     int a, b = sum(1, 2);
     
@@ -133,28 +135,18 @@ a(void) {
 ```
 
 - Except `char`, `float` or `double`, always use types declared in `stdint.h` library, eg. `uint8_t` for `unsigned 8-bit`, etc.
-- Do not use `stdbool.h` library. Use `1` or `0` for `true` or `false` respectively
-```c
-/* OK */
-uint8_t status;
-status = 0;
-
-/* Wrong */
-#include <stdbool.h>
-bool status = true;
-```
-
-- Never compare against `true`, eg. `if (check_func() == 1)`, use `if (check_func()) { ... }`
 - Always compare pointers against `NULL` value
 ```c
 /* OK, compare against NULL */
 void* ptr;
-if (ptr == NULL || ptr != NULL) {
+if (ptr == NULL || ptr != NULL) 
+{
 
 }
 
 /* Wrong */
-if (ptr || !ptr) {
+if (ptr || !ptr) 
+{
 
 }
 ```
@@ -176,26 +168,26 @@ for (int j = 0; j < 10; ++j) {}     /* OK */
 ```c
 
 /* When d could be modified, data pointed to by d could not be modified */
-void
-my_func(const void* d) {
+void my_func(const void* d) 
+{
 
 }
 
 /* When d and data pointed to by d both could not be modified */
-void
-my_func(const void* const d) {
+void my_func(const void* const d) 
+{
 
 }
 
 /* Not required, it is advised */
-void
-my_func(const size_t len) {
+void my_func(const size_t len) 
+{
 
 }
 
 /* When d should not be modified inside function, only data pointer to by d could be modified */
-void
-my_func(void* const d) {
+void my_func(void* const d) 
+{
 
 }
 ```
@@ -212,37 +204,14 @@ my_func(void* const d) {
  * thus use `void *`
  */
 /* OK example */
-void
-send_data(const void* data, size_t len) { /* OK */
+void send_data(const void* data, size_t len) /* OK */
+{ 
     /* Do not cast `void *` or `const void *` */
     const uint8_t* d = data;/* Function handles proper type for internal usage */
 }
 
-void
-send_data(const void* data, int len) {    /* Wrong */
-}
-```
-
-- Never use *Variable Length Array* (VLA). Use dynamic memory allocation instead with standard C `malloc` and `free` functions or if library/project provides custom memory allocation, use its implementation
-- Always use brackets with `sizeof` operator.
-```c
-/* OK */
-#include <stdlib.h>
-void my_func(size_t size) {
-    int* arr;
-    arr = malloc(sizeof(*arr) * n); /* OK, Allocate memory */
-    arr = malloc(sizeof *arr * n);  /* Wrong, brackets for sizeof operator are missing */
-    if (arr == NULL) {
-        /* FAIL, no memory */
-    }
-    
-    free(arr);  /* Free memory after usage */
-}
-
-/* Wrong */
-void
-my_func(int size) {
-    int arr[size];      /* Wrong, do not use VLA */
+void send_data(const void* data, int len) /* Wrong */
+{    
 }
 ```
 
@@ -265,8 +234,6 @@ if (is_ok == 0)     /* Wrong, use ! for negative check */
 - Always include check for `C++` with `extern` keyword in header file
 - Every function must include *doxygen-enabled* comment, even if function is `static`
 - Use English names/text for functions, variables, comments
-- Use *lowercase* characters for variables
-- Use *underscore* if variable contains multiple names, eg. `force_redraw`. Do not use `forceRedraw`
 - Never cast function returning `void *`, eg. `uint8_t* ptr = (uint8_t *)func_returning_void_ptr();` as `void *` is safely promoted to any other pointer type
     - Use `uint8_t* ptr = func_returning_void_ptr();` instead
 - Always use `<` and `>` for C Standard Library include files, eg. `#include <stdlib.h>`
@@ -306,8 +273,8 @@ if (is_ok == 0)     /* Wrong, use ! for negative check */
 
 - Use `12` indents (`12 * 4` spaces) offset when commenting. If statement is larger than `12` indents, make comment `4-spaces` aligned (examples below)
 ```c
-void
-my_func(void) {
+void my_func(void) 
+{
     char a, b;
                                                 
     a = call_func_returning_char_a(a);          /* This is comment with 12*4 spaces indent from beginning of line */
@@ -318,7 +285,6 @@ my_func(void) {
 # Functions
 
 - Every function which may have access from outside its module, must include function *prototype* (or *declaration*)
-- Function name must be lowercase, optionally separated with underscore `_` character
 ```c
 /* OK */
 void my_func(void);
@@ -339,67 +305,23 @@ my_struct_t * my_func(int a, int b);
 const char *my_func(void);
 my_struct_t* my_func(void);
 ```
-- Align all function prototypes (with the same/similar functionality) for better readability
-```c
-/* OK, function names aligned */
-void        set(int a);
-my_type_t   get(void);
-my_ptr_t *  get_ptr(void);
-
-/* Wrong */
-void set(int a);
-const char* get(void);
-```
-
-- Function implementation must include return type and optional other keywords in separate line
-```c
-/* OK */
-int
-foo(void) {
-    return 0;
-}
-
-/* OK */
-static const char *
-get_string(void) {
-    return "Hello world!\r\n";
-}
-
-/* Wrong */
-int foo(void) {
-    return 0;
-}
-```
 
 - When function returns pointer, asterisk character must include space between type and character (`char *`)
 ```c
 /* OK */
-const char *
-foo(void) {
+const char * foo(void) 
+{
     return "test";
 }
 
 /* Wrong */
-const char*
-foo(void) {
+const char* foo(void) 
+{
     return "test";
 }
 ```
 
 # Variables
-
-- Make variable name all lowercase with optional underscore `_` character
-```c
-/* OK */
-int a;
-int my_var;
-int myvar;
-
-/* Wrong */
-int A; 
-int myVar;
-int MYVar;
-```
 
 - Group local variables together by `type`
 ```c
@@ -413,8 +335,8 @@ foo(void) {
 
 - Do not declare variable after first executable statement
 ```c
-void
-foo(void) {
+void foo(void) 
+{
     int a;
     a = bar();
     int b;      /* Wrong, there is already executable statement */
@@ -425,7 +347,8 @@ foo(void) {
 ```c
 int a, b;
 a = foo();
-if (a) {
+if (a) 
+{
     int c, d;   /* OK, c and d are in if-statement scope */
     c = foo();
     int e;      /* Wrong, there was already executable statement inside block */
@@ -450,7 +373,6 @@ char *p, *n;
 
 # Structures, enumerations, typedefs
 
-- Structure or enumeration name must be lowercase with optional underscore `_` character between words
 - Structure or enumeration may contain `typedef` keyword
 - All structure members must be lowercase
 - All enumeration members must be uppercase
@@ -461,21 +383,24 @@ When structure is declared, it may use one of `3` different options:
 
 1. When structure is declared with *name only*, it *must not* contain `_t` suffix after its name.
 ```c
-struct struct_name {
+struct struct_name 
+{
     char* a;
     char b;
 };
 ```
 2. When structure is declared with *typedef only*, it *has to* contain `_t` suffix after its name.
 ```c
-typedef struct {
+typedef struct 
+{
     char* a;
     char b;
 } struct_name_t;
 ```
 3. When structure is declared with *name and typedef*, it *must not* contain `_t` for basic name and it *has to* contain `_t` suffix after its name for typedef part.
 ```c
-typedef struct struct_name {
+typedef struct struct_name 
+{
     char* a;
     char b;
     char c;
@@ -486,24 +411,28 @@ Examples of bad declarations and their suggested corrections
 ```c
 /* a and b must be separated to 2 lines */
 /* Name of structure with typedef must include _t suffix */
-typedef struct {
+typedef struct 
+{
     int a, b;
 } a;
 
 /* Corrected version */
-typedef struct {
+typedef struct 
+{
     int a;
     int b;
 } a_t;
 
 /* Wrong name, it must not include _t suffix */
-struct name_t {
+struct name_t 
+{
     int a;
     int b;
 };
 
 /* Wrong parameters, must be all uppercase */
-typedef enum {
+typedef enum 
+{
     MY_ENUM_TESTA,
     my_enum_testb,
 } my_enum_t;
@@ -512,7 +441,8 @@ typedef enum {
 - When initializing structure on declaration, use `C99` initialization style
 ```c
 /* OK */
-a_t a = {
+a_t a = 
+{
     .a = 4,
     .b = 5,
 };

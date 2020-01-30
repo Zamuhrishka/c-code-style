@@ -230,7 +230,6 @@ if (is_ok == 1)     /* Wrong, never compare boolean variable against 1! */
 if (is_ok == 0)     /* Wrong, use ! for negative check */
 ```
 
-- Always use `/* comment */` for comments, even for *single-line* comment
 - Always include check for `C++` with `extern` keyword in header file
 - Every function must include *doxygen-enabled* comment, even if function is `static`
 - Use English names/text for functions, variables, comments
@@ -242,12 +241,6 @@ if (is_ok == 0)     /* Wrong, use ! for negative check */
 - Always respect code style already used in project or library
 
 # Comments
-
-- Comments starting with `//` are not allowed. Always use `/* comment */`, even for single-line comment
-```c
-//This is comment (wrong)
-/* This is comment (ok) */
-```
 
 - For multi-line comments use `space+asterisk` for every line
 ```c
@@ -285,6 +278,7 @@ void my_func(void)
 # Functions
 
 - Every function which may have access from outside its module, must include function *prototype* (or *declaration*)
+- Function name must be lowercase, optionally separated with underscore _ character
 ```c
 /* OK */
 void my_func(void);
@@ -322,6 +316,19 @@ const char* foo(void)
 ```
 
 # Variables
+
+- Use `camelCase` for variable names
+```c
+/* OK */
+int a;
+int myVar;
+
+/* Wrong */
+int A; 
+int MYVar;
+int my_var;
+int myvar;
+```
 
 - Group local variables together by `type`
 ```c
@@ -464,9 +471,12 @@ typedef uint8_t (*my_func_typedef_fn)(uint8_t p1, const char* p2);
 - Every compound statement must include single indent; when nesting statements, include `1` indent size for each nest
 ```c
 /* OK */
-if (c) {
+if (c) 
+{
     do_a();
-} else {
+} 
+else 
+{
     do_b();
 }
 
@@ -481,39 +491,11 @@ if (c) do_a();
 else do_b();
 ```
 
-- In case of `if` or `if-else-if` statement, `else` must be in the same line as closing bracket of first statement
-```c
-/* OK */
-if (a) {
-
-} else if (b) {
-
-} else {
-
-}
-
-/* Wrong */
-if (a) {
-
-} 
-else {
-
-}
-
-/* Wrong */
-if (a) {
-
-} 
-else
-{
-
-}
-```
-
 - In case of `do-while` statement, `while` part must be in the same line as closing bracket of `do` part
 ```c
 /* OK */
-do {
+do 
+{
     int a;
     a = do_a();
     do_b(a);
@@ -665,11 +647,12 @@ switch (var) {
 ```
 
 - If local variables are required, use curly brackets and put `break` statement inside.
-    - Put opening curly bracket in the same line as `case` statement
+    - Put opening curly bracket in the next line as `case` statement
 ```c
 switch (a) {
     /* OK */
-    case 0: {
+    case 0: 
+    {
         int a, b;
         char c;
         a = 5;
@@ -678,8 +661,7 @@ switch (a) {
     }
     
     /* Wrong */
-    case 1:
-    {
+    case 1: {
         int a;
         break;    
     }

@@ -893,7 +893,7 @@ typedef enum {
 } point_color_t;
 ```
 
-- Documentation for functions must be written in function implementation (source file usually)
+- Documentation for functions must be written in function declaration (header file usually) except *static* functions
 - Function must include `brief` and all parameters documentation
 - Every parameter must be noted if it is `in` or `out` for *input* and *output* respectively
 - Function must include `return` parameter if it returns something. This does not apply for `void` functions

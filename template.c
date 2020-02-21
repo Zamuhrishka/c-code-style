@@ -60,7 +60,7 @@ typedef struct _fifo
 *
 * Public function defined in template.h
 */
-bool template_init(uint32_t param1, uint8_t param2)
+bool template_init(uint32_t *param1, uint8_t param2)
 {
-
+	assert((receiver != NULL) && "Is validated by the caller");
 }

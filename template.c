@@ -71,5 +71,8 @@ bool template_init(uint32_t *param1, uint8_t param2)
 	uint32_t telegramSize = 0;
 	memcpy(&telegramSize, binaryDatastream, sizeof telegramSize);
 	
-	
+	if(0 == x)
+	{
+	/* We'll get here if x is zero -- correct! */
+	}
 }

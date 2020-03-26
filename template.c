@@ -62,7 +62,7 @@ typedef struct _fifo
 */
 bool template_init(uint32_t *param1, uint8_t param2)
 {
-	assert((receiver != NULL) && "Is validated by the caller");
+	assert((NULL != receiver) && "Is validated by the caller");
 	
 	//SIZEOF TO VARIABLES Idiom
 	HelloTelegram* telegram = malloc(sizeof *telegram);
